@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+// import axios from "axios";
 import Nav from "./components/navbar";
 import Stopwatch from "./components/stopwatch"
 import './App.css';
@@ -17,7 +17,7 @@ const App = () => {
     <div className="App">
       <Nav />
       <header className="App-header">
-        {/* <Stopwatch /> */}
+        <Stopwatch />
       </header>
     </div>
   );
