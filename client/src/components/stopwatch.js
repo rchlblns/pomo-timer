@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 const StopwatchCard = styled.div`
@@ -20,7 +20,7 @@ color: #282c34;
 `
 
 const Stopwatch = () => {
-    
+
     const [timer, setTimer] = useState(0);
     const [isActive, setIsActive] = useState(false);
     const [isPaused, setisPaused] = useState(false);
@@ -34,13 +34,19 @@ const Stopwatch = () => {
         }, 1000)
     }
 
-    // const handlePause = () => {
-    //     setisPaused(true);
-    // }
+    const handlePause = () => {
+        clearInterval(countRef.current);
+        setisPaused(false);
+        // console.log("timer is paused");
+    }
 
-    // const handleResume = () => {
-
-    // }
+    const handleResume = () => {
+        setisPaused(true);
+        countRef.current = setInterval(() => {
+            setTimer((timer) => timer + 1)
+        }, 1000);
+        // console.log("resuming timer");
+    }
 
     const handleReset = () => {
         clearInterval(countRef.current);
@@ -53,7 +59,14 @@ const Stopwatch = () => {
         <StopwatchCard>
             <Timer>{timer}</Timer>
             <div class="button-group">
-                <TimerControl onClick={handleStart}>Start</TimerControl>
+                {
+                    !isActive && !isPaused ?
+                        <TimerControl onClick={handleStart}>Start</TimerControl>
+                        : (
+                            isPaused ? <TimerControl onClick={handlePause}>Pause</TimerControl> :
+                            <TimerControl onClick={handleResume}>Resume</TimerControl>
+                        )
+                }
                 <TimerControl onClick={handleReset}>Reset</TimerControl>
             </div>
         </StopwatchCard>
