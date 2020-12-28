@@ -1,14 +1,16 @@
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 
 const app = express();
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 // serve static files
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 // test route to backend
-app.get("/test", (req, res) => {
+app.use("/test", (req, res) => {
     res.send("Hello from the backend of this app!");
 });
 
