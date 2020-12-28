@@ -8,12 +8,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 // test route to backend
-app.use("/test", (req, res) => {
+app.get("/test", (req, res) => {
     res.send("Hello from the backend of this app!");
 });
 
 // handle React routing, return all requests to React app
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 })
 
