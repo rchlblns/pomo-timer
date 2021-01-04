@@ -55,9 +55,18 @@ const Stopwatch = () => {
         setTimer(0);
     }
 
+    const timeFormat = () => {
+        let getSeconds = `0${(timer % 60)}`.slice(-2);
+        let minutes = `0${Math.floor(timer / 60)}`;
+        let getMinutes = `0${minutes % 60}`.slice(-2);
+        let getHours = `0${Math.floor(timer / 3600)}`.slice(-2);
+
+        return `${getHours} : ${getMinutes} : ${getSeconds}`
+    }
+
     return (
         <StopwatchCard>
-            <Timer>{timer}</Timer>
+            <Timer>{timeFormat()}</Timer>
             <div class="button-group">
                 {
                     !isActive && !isPaused ?
