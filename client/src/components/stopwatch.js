@@ -55,6 +55,8 @@ const Stopwatch = () => {
                         setCounter((counter) => counter - 1)
                     } else {
                         clearInterval(intervalId);
+                        setIsActive(false);
+                        setCounter(15);
                     }
                 }, 1000)
             } 
