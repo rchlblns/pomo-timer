@@ -19,9 +19,27 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 })
 
-// port info
+// run server
 const port = process.env.PORT || 3002;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`🌎  ==> App listening on port ${port}.`);
 });
+
+process.on("SIGNIT", () => { 
+    console.log("exiting...");
+    server.close();
+    process.exit(); 
+});
+
+process.on("SIGTERM", () => {
+    console.log("bye!");
+    server.close();
+    process.exit();
+})
+
+process.on("uncaughtexception", () => {
+    console.log(`port ${port} shutting down`);
+    server.close();
+    process.exit();
+})
