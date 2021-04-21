@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const StopwatchCard = styled.div`
@@ -19,8 +19,15 @@ align-items: center;
 
 const TimerControl = styled.button`
 margin: 8px;
-padding: 2vh 2vw;
+padding: 2vh 4vw;
 border-radius: 24px;
+cursor: pointer;
+background-color: transparent;
+border-color: #00B884;
+
+:hover {
+    background-color: scale-color(#00B884, $lightness: -20%);
+}
 
 @media only screen and (max-width: 768px) {
    padding: 2vh 6vw;
@@ -35,48 +42,33 @@ font-size: 2em;
 
 const Stopwatch = () => {
 
-    const [timer, setTimer] = useState(0);
-    const [isActive, setIsActive] = useState(false);
-    const [isPaused, setisPaused] = useState(false);
-    const countRef = useRef(null);
+    const [counter, setCounter] = useState(15);
+    const [active, setIsActive] = useState(false);
+    
+    useEffect(() => {
 
-    const handleStart = () => {
-        setIsActive(true);
-        setisPaused(true);
-        // increments timer by 1 every second
-        countRef.current = setInterval(() => {
-            setTimer((timer) => timer + 1)
-        }, 1000)
-    }
+            let intervalId;
 
-    const handlePause = () => {
-        clearInterval(countRef.current);
-        setisPaused(false);
-        // console.log("timer is paused");
-    }
+            if (active) {
+                intervalId = setInterval(() => {
+                    if (counter > 0) {
+                        setCounter((counter) => counter - 1)
+                    } else {
+                        clearInterval(intervalId);
+                    }
+                }, 1000)
+            } 
 
-    const handleResume = () => {
-        setisPaused(true);
-        countRef.current = setInterval(() => {
-            setTimer((timer) => timer + 1)
-        }, 1000);
-        // console.log("resuming timer");
-    }
-
-    const handleReset = () => {
-        clearInterval(countRef.current);
-        setIsActive(false);
-        setisPaused(false);
-        setTimer(0);
-    }
+            return () => 
+            clearInterval(intervalId); 
+    })
 
     const timeFormat = () => {
-        let getSeconds = `0${(timer % 60)}`.slice(-2);
-        let minutes = `0${Math.floor(timer / 60)}`;
+        let getSeconds = `0${(counter % 60)}`.slice(-2);
+        let minutes = `0${Math.floor(counter / 60)}`;
         let getMinutes = `0${minutes % 60}`.slice(-2);
-        let getHours = `0${Math.floor(timer / 3600)}`.slice(-2);
 
-        return `${getHours} : ${getMinutes} : ${getSeconds}`
+        return `${getMinutes} : ${getSeconds}`
     }
 
     return (
@@ -84,15 +76,7 @@ const Stopwatch = () => {
             <div>
                 <Timer>{timeFormat()}</Timer>
                 <div class="button-group">
-                    {
-                        !isActive && !isPaused ?
-                            <TimerControl onClick={handleStart}>Start</TimerControl>
-                            : (
-                                isPaused ? <TimerControl onClick={handlePause}>Pause</TimerControl> :
-                                    <TimerControl onClick={handleResume}>Resume</TimerControl>
-                            )
-                    }
-                    <TimerControl onClick={handleReset}>Reset</TimerControl>
+                    <TimerControl onClick={() => setIsActive(!active)}>{active ? "Pause" : "Start"}</TimerControl>
                 </div>
             </div>
         </StopwatchCard>
